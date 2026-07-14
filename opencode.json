@@ -5,7 +5,7 @@
             "npm": "@ai-sdk/openai-compatible",
             "name": "Atomic LiteLLM",
             "options": {
-                "baseURL": "http://litellm.atomicnuggetstudio.com/v1"
+                "baseURL": "https://litellm.atomicnuggetstudio.com/v1"
             },
             "models": {
                 "auto": {
