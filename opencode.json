@@ -15,5 +15,52 @@
         }
     },
     "model": "atomic/auto",
-    "small_model": "atomic/auto"
+    "small_model": "atomic/auto",
+    "agent": {
+        "build": {
+            "description": "Implementa funcionalidades seguindo os padrões da Atomic.",
+            "mode": "primary",
+            "prompt": "{file:./agents/build.md}"
+        },
+        "plan": {
+            "description": "Cria planos detalhados sem modificar código.",
+            "mode": "primary",
+            "prompt": "{file:./agents/plan.md}",
+            "permission": {
+                "edit": "deny",
+                "bash": {
+                    "*": "deny",
+                    "ls *": "allow",
+                    "grep *": "allow",
+                    "find *": "allow",
+                    "git log*": "allow",
+                    "git status*": "allow",
+                    "git diff*": "allow",
+                    "git show*": "allow",
+                    "cat *": "allow",
+                    "pwd": "allow"
+                }
+            }
+        },
+        "review": {
+            "description": "Realiza revisão técnica das alterações.",
+            "mode": "subagent",
+            "prompt": "{file:./agents/review.md}",
+            "permission": {
+                "edit": "deny",
+                "bash": {
+                    "*": "deny",
+                    "ls *": "allow",
+                    "grep *": "allow",
+                    "find *": "allow",
+                    "git log*": "allow",
+                    "git status*": "allow",
+                    "git diff*": "allow",
+                    "git show*": "allow",
+                    "cat *": "allow",
+                    "pwd": "allow"
+                }
+            }
+        }
+    }
 }
