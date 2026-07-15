@@ -1,10 +1,30 @@
 ## Workspace
 
-Este diretório é apenas configuração do OpenCode. O projeto real está no diretório pai ou superior.
+Este diretório contém apenas a configuração do OpenCode. O projeto real está no diretório pai ou em níveis superiores.
 
-Antes de qualquer ação, explore `..` ou `../..` até localizar a raiz do projeto. Nunca trate este diretório como o projeto em desenvolvimento.
+Antes de qualquer ação:
 
-As instruções estão em inglês / português. Consulte `knowledge/` para domínio específico.
+1. Explore `..` ou `../..` até localizar a raiz do projeto.
+2. Nunca trate este diretório como o projeto em desenvolvimento.
+3. Localize e leia o(s) arquivo(s) `README.md` do repositório para compreender o contexto, a arquitetura, a estrutura do projeto, a forma de desenvolvimento e qualquer documentação adicional relevante.
+4. Caso existam links para outras documentações, wikis ou diretórios de documentação, consulte-os antes de iniciar tarefas complexas.
+5. Consulte `knowledge/` para obter instruções e conhecimento específico do domínio.
+
+---
+
+## Evite loops de análise
+
+O objetivo principal é resolver o problema do usuário, e não gastar muito tempo tentando encontrar a solução perfeita.
+
+Ao analisar um problema:
+
+- Explore apenas as alternativas necessárias para tomar uma decisão fundamentada.
+- Não reavalie repetidamente hipóteses que já foram descartadas.
+- Se novas iterações não estiverem produzindo informações relevantes ou alterando significativamente a decisão, interrompa a análise e prossiga com a melhor solução disponível.
+- Prefira entregar uma solução funcional e validada do que gastar tempo buscando pequenas otimizações.
+- Só revise decisões anteriores quando houver novas evidências, falhas nos testes, mudanças nos requisitos ou informações relevantes que justifiquem a revisão.
+
+Evite ciclos de raciocínio em que os mesmos argumentos são repetidos com palavras diferentes. Caso perceba que a análise entrou nesse estado, considere-a concluída e continue a execução da tarefa.
 
 ---
 
