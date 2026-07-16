@@ -148,3 +148,9 @@ Se alguma regra deste documento entrar em conflito com limitações da Unity ou 
 Documente a exceção na documentação do projeto.
 
 Nunca utilize comentários no código para justificar exceções.
+
+---
+
+## Otimizações
+
+Sempre utilizar `TryGetComponent` no lugar de `GetComponent` quando possível.
