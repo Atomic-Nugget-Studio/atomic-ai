@@ -92,3 +92,27 @@ Evite comentários desnecessários.
 Utilize documentação XML somente em código de bibliotecas, nunca em aplicações, a menos quando pedido.
 
 O código deve ser suficientemente claro para dispensar explicações.
+
+---
+
+## Simplificações
+
+Utilize sempre os recursos de simplificação oferecidos pela versão de C# utilizada pelo projeto, desde que não prejudiquem a identificação dos tipos.
+
+Preferir:
+
+- `new(...)` em vez de `new Tipo(...)` quando o tipo já estiver explícito previamente na mesma linha.
+- `[]` em vez de `new List<T>()` para inicialização de coleções, quando suportado pela linguagem.
+- Outras simplificações modernas da linguagem sempre que tornarem o código mais conciso sem reduzir sua clareza.
+
+Nunca utilize uma simplificação quando ela tornar o tipo ou a intenção do código ambíguos.
+
+## Logs
+
+Não adicione logs de console (`Debug.Log`, `Debug.LogWarning`, `Debug.LogError`, etc.) por iniciativa própria.
+
+Só adicione logs quando:
+- solicitado explicitamente na tarefa; ou
+- forem necessários para o funcionamento do sistema (ex.: ferramentas de debug permanentes).
+
+Não utilize logs para depuração temporária. Se precisar deles durante a implementação, remova-os antes de finalizar a tarefa.
