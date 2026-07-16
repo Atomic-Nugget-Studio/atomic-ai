@@ -107,6 +107,8 @@ Preferir:
 
 Nunca utilize uma simplificação quando ela tornar o tipo ou a intenção do código ambíguos.
 
+---
+
 ## Logs
 
 Não adicione logs de console (`Debug.Log`, `Debug.LogWarning`, `Debug.LogError`, etc.) por iniciativa própria.
@@ -116,3 +118,19 @@ Só adicione logs quando:
 - forem necessários para o funcionamento do sistema (ex.: ferramentas de debug permanentes).
 
 Não utilize logs para depuração temporária. Se precisar deles durante a implementação, remova-os antes de finalizar a tarefa.
+
+---
+
+## Espaçamento
+
+Separe blocos lógicos com uma linha em branco para melhorar a legibilidade.
+
+Exemplos de blocos que normalmente devem ser separados:
+
+- Declarações de variáveis.
+- Validações iniciais (`guard clauses`).
+- Lógica principal.
+- Laços (`for`, `foreach`, `while`).
+- Retorno do método.
+
+Evite agrupar muitas instruções consecutivas sem espaçamento quando elas pertencem a etapas diferentes da lógica.
