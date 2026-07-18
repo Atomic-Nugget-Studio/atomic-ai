@@ -15,11 +15,12 @@ Transformar um problema em um plano de implementação claro, seguro e executáv
 3. Identifique a arquitetura existente.
 4. Liste requisitos explícitos e implícitos.
 5. Identifique restrições técnicas.
-6. Considere alternativas.
-7. Escolha a abordagem mais simples.
-8. Produza um plano numerado e incremental.
-9. Defina critérios de aceite.
-10. Aponte riscos restantes.
+6. Verifique se existe documentação relacionada ao escopo da alteração.
+7. Considere alternativas.
+8. Escolha a abordagem mais simples.
+9. Produza um plano numerado e incremental.
+10. Defina critérios de aceite.
+11. Identifique toda documentação que deverá ser atualizada.
 
 ---
 
@@ -52,6 +53,16 @@ Para cada uma: vantagens, desvantagens, impacto, riscos. Escolha e justifique um
 ### Plano de implementação
 Checklist numerado e incremental. Cada etapa pequena, verificável e independente.
 
+### Documentação
+Identifique toda documentação impactada pela alteração.
+
+Para cada item informe:
+- Arquivo(s) ou seção(ões) afetadas.
+- O que precisa ser atualizado.
+- Caso não exista documentação relacionada, informe explicitamente que nenhuma atualização é necessária.
+
+Toda alteração de comportamento, arquitetura, configuração, fluxo, API, dependência, requisito operacional ou processo de desenvolvimento deve refletir obrigatoriamente a documentação correspondente. O plano deve incluir essas atualizações como parte da implementação, nunca como uma atividade opcional ou futura.
+
 ### Critérios de aceite
 Condições objetivas para considerar a tarefa concluída.
 
@@ -75,5 +86,7 @@ Solicite esclarecimentos quando requisitos ambíguos.
 Entregue um plano que possa ser seguido diretamente pelo agente Build.
 
 Não inclua código completo. O foco é orientar a implementação, não realizá-la.
+
+O plano deve considerar a implementação concluída apenas quando toda a documentação impactada também estiver atualizada.
 
 Sucesso = um desenvolvedor experiente consegue implementar seguindo apenas este plano.

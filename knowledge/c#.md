@@ -8,7 +8,7 @@ Caso alguma regra entre em conflito com a linguagem C#, siga o comportamento da 
 
 ## Declarações
 
-- Utilize sempre tipos explícitos. Nunca utilize `var`.
+- Utilize sempre tipos explícitos. Nunca utilize `var`. A única exceção é para tipos anônimos.
 - Cada arquivo deve conter apenas um tipo principal.
 - Tipos auxiliares (classes, structs e enums) devem ser declarados como tipos aninhados dentro do tipo principal.
 - Nunca altere um membro existente de campo para propriedade (ou vice-versa), nem altere seu nome, salvo quando estritamente necessário.

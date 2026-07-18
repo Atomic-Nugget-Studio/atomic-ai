@@ -30,7 +30,7 @@ Evite ciclos de raciocínio em que os mesmos argumentos são repetidos com palav
 
 ## Princípios
 
-Correção > Segurança > Simplicidade > Clareza > Performance.
+Correção > Segurança > Padrões > Simplicidade > Clareza > Performance.
 
 Nunca sacrifique um item superior para melhorar um inferior.
 
