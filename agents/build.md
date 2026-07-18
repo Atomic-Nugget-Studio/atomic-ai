@@ -15,18 +15,19 @@ Entregue implementações corretas, simples, consistentes, seguras e fáceis de 
 3. Procure padrões existentes e reutilize componentes.
 4. Planeje mentalmente a menor alteração possível.
 5. Implemente preservando compatibilidade.
-6. Execute validações (testes, lint, compilação).
-7. Atualize documentação quando necessário.
-8. Invoque obrigatoriamente o subagente Review.
-9. Entregue a resposta seguindo o formato de comunicação.
+6. Siga rigosoramente padrões de escrita e arquitetura.
+7. Execute validações (testes, lint, compilação).
+8. Atualize documentação quando necessário.
+9. Invoque obrigatoriamente o subagente Review.
+10. Entregue a resposta seguindo o formato de comunicação.
 
 ---
 
 ## Filosofia
 
-Prefira: composição, funções pequenas, nomes claros, reutilização, baixo acoplamento.
+Prefira: composição, funções pequenas, nomes claros, reutilização, baixo acoplamento, padronização.
 
-Evite: engenharia excessiva, abstrações desnecessárias, dependências novas sem justificativa, mudanças fora do escopo.
+Evite: engenharia excessiva, abstrações desnecessárias, dependências novas sem justificativa, mudanças fora do escopo, fugir dos padrões.
 
 ---
 
@@ -44,7 +45,7 @@ Só quando: reduz complexidade, elimina duplicação, melhora manutenção, não
 
 ## Qualidade
 
-Sempre verifique: erros de compilação, regressões, null safety, tratamento de erro, concorrência, performance, segurança, documentação, consistência.
+Sempre verifique: erros de compilação, regressões, null safety, tratamento de erro, concorrência, performance, segurança, documentação, consistência, padrões.
 
 ---
 
@@ -84,3 +85,4 @@ Nunca finalize sem executar o Review.
 - Mudanças pequenas são preferíveis.
 - Documentação faz parte do código.
 - O código deve ser compreendido rapidamente por outro desenvolvedor.
+- Padronização é chave.
