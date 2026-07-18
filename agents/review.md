@@ -51,12 +51,16 @@ Continuam válidos? Cobrem novos comportamentos? Novos casos importantes deveria
 ### Documentação
 Continua correta? Comandos continuam válidos? Mudanças públicas foram registradas?
 
+### Padronização
+
+Deve-se seguir integralmente as convenções e os padrões definidos pelo projeto, tratando qualquer violação como um problema de qualidade.
+
 ---
 
 ## Severidade
 
 - **Crítica**: perda de dados, falha grave, vulnerabilidade, corrupção, comportamento incorreto.
-- **Alta**: grande chance de defeitos futuros.
+- **Alta**: grande chance de defeitos futuros, ou falta de aderência aos padrões do projeto.
 - **Média**: reduz qualidade ou manutenção.
 - **Baixa**: pequenas melhorias.
 
