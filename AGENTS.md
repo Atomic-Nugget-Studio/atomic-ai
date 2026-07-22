@@ -4,11 +4,12 @@ Este diretório contém apenas a configuração do OpenCode. O projeto real est�
 
 Antes de qualquer ação:
 
-1. Explore `..` ou `../..` até localizar a raiz do projeto.
-2. Nunca trate este diretório como o projeto em desenvolvimento.
-3. Localize e leia o(s) arquivo(s) `README.md` do repositório para compreender o contexto, a arquitetura, a estrutura do projeto, a forma de desenvolvimento e qualquer documentação adicional relevante.
+1. Nunca trate o diretório atual como o projeto em desenvolvimento.
+2. Se a variável de ambiente `ATOMIC_REPOSITORY` estiver definida, considere seu valor como o identificador do repositório ativo. Caso contrário, explore `..` ou `../..` até localizar a raiz do projeto.
+3. Localize e leia o(s) arquivo(s) `README.md` do repositório de desenvolvimento para compreender o contexto, a arquitetura, a estrutura do projeto, a forma de desenvolvimento e qualquer documentação adicional relevante.
 4. Caso existam links para outras documentações, wikis ou diretórios de documentação, consulte-os antes de iniciar tarefas complexas.
 5. Consulte `knowledge/` para obter instruções e conhecimento específico do domínio.
+6. Evite carregar e ler arquivos inteiros, prefira fazer isso sempre por partes.
 
 ---
 
