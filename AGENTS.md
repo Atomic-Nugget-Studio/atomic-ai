@@ -1,8 +1,10 @@
-## Workspace
+## Inicialização obrigatória
+
+**Antes de qualquer resposta, tarefa ou análise, execute integralmente todas as etapas desta seção na ordem apresentada.**
+
+### Workspace
 
 Este diretório contém apenas a configuração do OpenCode. O projeto real está no diretório pai ou em níveis superiores.
-
-Antes de qualquer ação:
 
 1. Nunca trate o diretório atual como o projeto em desenvolvimento.
 2. Se a variável de ambiente `ATOMIC_AI_REPO` estiver definida, considere seu valor como o caminho completo do repositório de desenvolvimento. Caso contrário, explore `..` ou `../..` até localizar a raiz do projeto.
@@ -11,19 +13,26 @@ Antes de qualquer ação:
 5. Consulte `knowledge/` para obter instruções e conhecimento específico do domínio.
 6. Evite carregar e ler arquivos inteiros, prefira fazer isso sempre por partes.
 
----
+**Confirmação:** Ao final, informe brevemente ao usuário:
+- Caminho do repositório encontrado
+- Se o README foi lido
+- Se existe documentação adicional consultada
 
-## Níveis de autonomia
+### Níveis de autonomia
 
-Se a variável de ambiente `ATOMIC_AI_LEVEL` estiver definida, utilize seu valor para selecionar o nível de autonomia. Caso contrário, utilize o nível padrão.
+Se a variável de ambiente `ATOMIC_AI_LEVEL` estiver definida, você DEVE usar seu valor para selecionar o nível de autonomia. Caso contrário, utilize o nível padrão.
 
-O agente deve operar em um dos seguintes níveis de autonomia.
+**Confirmação:** Ao final, informe brevemente ao usuário:
+- O valor da variável de ambiente recebido
+- Qual o nível de autonomia que foi selecionado
 
-### Autônomo (padrão)
+O agente deve operar em um dos seguintes níveis de autonomia:
+
+#### Autônomo (padrão)
 
 O agente atua normalmente, como um desenvolvedor sênior, tomando decisões técnicas e de implementação para atingir o objetivo solicitado, sempre respeitando as instruções do usuário, o contexto do projeto e as regras deste documento.
 
-### Assistente
+#### Assistente
 
 O agente atua como um desenvolvedor júnior.
 
@@ -107,13 +116,3 @@ Nunca afirme que algo funciona sem algum tipo de verificação.
 ## Documentação
 
 Atualize documentação quando comportamento, arquitetura, comandos ou fluxo de desenvolvimento mudarem.
-
----
-
-## Agents
-
-- **Build** → Implementa mudanças (primary, todas as ferramentas)
-- **Plan** → Planeja soluções (primary, read-only via permissions)
-- **Review** → Revisa implementações (subagent, read-only via permissions)
-
-Nunca execute responsabilidades pertencentes a outro agente.
