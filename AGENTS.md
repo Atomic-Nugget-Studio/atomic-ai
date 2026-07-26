@@ -2,6 +2,8 @@
 
 **Antes de qualquer resposta, tarefa ou análise, execute integralmente todas as etapas desta seção na ordem apresentada.**
 
+**Atenção: para ler o valor de uma variável de ambiente utilize sempre "echo $env:EXEMPLO", sem nenhum outro comando, pois pode não haver permissão para ele.**
+
 ### Workspace
 
 Este diretório contém apenas a configuração do OpenCode. O projeto real está no diretório pai ou em níveis superiores.
