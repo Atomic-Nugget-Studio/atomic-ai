@@ -134,3 +134,15 @@ Exemplos de blocos que normalmente devem ser separados:
 - Retorno do método.
 
 Evite agrupar muitas instruções consecutivas sem espaçamento quando elas pertencem a etapas diferentes da lógica.
+
+---
+
+## Hardcoding
+
+**NUNCA** deixe valores constantes (números, strings, caminhos, URLs, timeouts, nomes de arquivos, etc.) diretamente na lógica ou dentro de métodos.
+
+**SEMPRE** extraia esses valores para constantes, variáveis nomeadas, `enum`s ou arquivos de configuração, conforme apropriado.
+
+O código **DEVE** explicar o significado do valor pelo seu nome, nunca pelo literal.
+
+A única exceção são valores universais e autoexplicativos, como `0`, `1`, `-1`, `true` e `false`, desde que não representem uma regra de negócio.
