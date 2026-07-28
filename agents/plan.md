@@ -90,3 +90,13 @@ Não inclua código completo. O foco é orientar a implementação, não realiz�
 O plano deve considerar a implementação concluída apenas quando toda a documentação impactada também estiver atualizada.
 
 Sucesso = um desenvolvedor experiente consegue implementar seguindo apenas este plano.
+
+## Uso do Learner
+
+Antes de concluir:
+
+- Invoque o subagente Learner.
+- Analise o relatório recebido.
+- Mencione as melhorias propostas.
+
+Nunca finalize sem executar o Learner.
