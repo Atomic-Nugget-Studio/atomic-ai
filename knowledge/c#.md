@@ -146,3 +146,11 @@ Evite agrupar muitas instruções consecutivas sem espaçamento quando elas pert
 O código **DEVE** explicar o significado do valor pelo seu nome, nunca pelo literal.
 
 A única exceção são valores universais e autoexplicativos, como `0`, `1`, `-1`, `true` e `false`, desde que não representem uma regra de negócio.
+
+---
+
+## Unicode
+
+- NUNCA escape caracteres Unicode em código-fonte ou texto, a menos que o formato de destino exija isso explicitamente.
+- Sempre escreva caracteres UTF-8 diretamente (ex.: `Autenticação`, `Você`, `ç`, `ã`, `é`) em vez de sequências de escape como `\u00E7` ou `\u00E3`.
+- Sempre salve e preserve os arquivos em codificação UTF-8.
