@@ -85,7 +85,7 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
 - Se o usuário pediu para **não trabalhar** na Issue → responda adequadamente sem implementar código, sem criar commits e sem criar PR. `changedFiles` = `[]`, `branchName` = `null`.
 - Se o usuário pediu para **parar** o processamento → interrompa e confirme. `changedFiles` = `[]`, `branchName` = `null`.
 - Se o usuário fez uma **pergunta** ou pedido de **informação** (ex: "me explique", "qual a diferença entre X e Y", "documente como funciona") → responda diretamente. `changedFiles` = `[]`, `branchName` = `null`.
-- Se o usuário solicitou **gerar um arquivo** (ex: "gere um README", "crie um arquivo de configuração", "adicione um .gitignore") → crie o arquivo NO REPOSITÓRIO ALVO (`$ATOMIC_AI_REPO`), faça commit e submeta PR. `changedFiles` deve incluir o arquivo, `branchName` deve ser um slug.
+- Se o usuário solicitou **gerar um arquivo** (ex: "gere um README", "crie um arquivo de configuração", "adicione um .gitignore") → crie o arquivo NO REPOSITÓRIO ALVO (`$ATOMIC_AI_REPO`). **NÃO faça commit** — o sistema de orquestração cuida do git automaticamente. `changedFiles` deve incluir o arquivo, `branchName` deve ser um slug.
 - Se o trigger comment estiver vazio ou contiver apenas a menção "@Clanker", siga o fluxo padrão.
 
 ### Onde gravar arquivos:
@@ -96,9 +96,9 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
 - "@Clanker não trabalhe nessa issue" → Confirme, sem commits
 - "@Clanker me explique o que é esse bug" → Resposta direta, sem commits
 - "@Clanker documente como o webhook funciona" → Resposta direta (texto), sem commits
-- "@Clanker gere um README para o projeto" → Crie o arquivo no repo, commit, PR
-- "@Clanker crie um arquivo de configuração para CI" → Crie o arquivo no repo, commit, PR
-- "@Clanker adicione um .gitignore" → Crie o arquivo no repo, commit, PR
+- "@Clanker gere um README para o projeto" → Crie o arquivo no repo (sem commit — o sistema cuida do git)
+- "@Clanker crie um arquivo de configuração para CI" → Crie o arquivo no repo (sem commit — o sistema cuida do git)
+- "@Clanker adicione um .gitignore" → Crie o arquivo no repo (sem commit — o sistema cuida do git)
 - "@Clanker implemente a feature X" → Delegue para Build Agent
 - "@Clanker elabore um plano para X" → Delegue para Plan Agent
 
@@ -109,7 +109,7 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
 1. **ANTES de qualquer ação**, verifique o "Comentário que ativou o Clanker" (seção Instruções do Usuário acima).
 2. Leia atentamente a Issue fornecida (descrição, comentários, labels).
 3. Se o trigger comment contiver uma instrução que contradiz a implementação (ex: "não trabalhe"), PRIORIZE essa instrução e NÃO delegue para agents de código.
-4. Se o trigger comment pedir para **gerar um arquivo**, crie-o no repositório alvo e submeta PR (não é necessário delegar — faça diretamente).
+4. Se o trigger comment pedir para **gerar um arquivo**, crie-o no repositório alvo (NÃO faça commit — o sistema cuida do git automaticamente).
 5. Determine o tipo de tarefa:
    - **Planejamento/Arquitetura/Análise** → Delegar para Plan Agent via Task tool
    - **Implementação/Correção/Feature** → Delegar para Build Agent via Task tool
@@ -166,7 +166,7 @@ O Plan Agent deve seguir todas as diretrizes do agents/plan.md e produzir um pla
 - Analise criticamente antes de delegar
 - Preferir Build quando a tarefa for claramente de implementação
 - Preferir Plan quando houver ambiguidade ou complexidade
-- **Gerar um arquivo é tarefa de Build** — crie no repo alvo, commit, PR
+- **Gerar um arquivo é tarefa de Build** — crie no repo alvo (sem commit — o sistema cuida do git automaticamente)
 - Respostas diretas (perguntas, explicações, documentação em texto) ficam no comentário da issue, sem commits
 - Nunca implemente diretamente quando a tarefa for complexa — sempre delegue para o agente apropriado
 - **O resultado final DEVE ser gravado em `/workspace/result/agent-result.json` com JSON válido e TODOS os campos obrigatórios**

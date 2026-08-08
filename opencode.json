@@ -21,7 +21,41 @@
         "build": {
             "description": "Implementa funcionalidades seguindo os padrões da Atomic.",
             "mode": "all",
-            "prompt": "{file:./agents/build.md}"
+            "prompt": "{file:./agents/build.md}",
+            "permission": {
+                "bash": {
+                    "*": "deny",
+                    "echo *": "allow",
+                    "ls *": "allow",
+                    "grep *": "allow",
+                    "find *": "allow",
+                    "cat *": "allow",
+                    "pwd": "allow",
+                    "mkdir *": "allow",
+                    "node *": "allow",
+                    "git log*": "allow",
+                    "git status*": "allow",
+                    "git diff*": "allow",
+                    "git show*": "allow",
+                    "dotnet*": "allow",
+                    "npm*": "allow",
+                    "npx*": "allow",
+                    "yarn*": "allow",
+                    "pnpm*": "allow",
+                    "cargo*": "allow",
+                    "make*": "allow",
+                    "cmake*": "allow",
+                    "gradle*": "allow",
+                    "mvn*": "allow",
+                    "python*": "allow",
+                    "pytest*": "allow",
+                    "pip*": "allow",
+                    "go *": "allow",
+                    "rustc*": "allow",
+                    "gcc*": "allow",
+                    "g++*": "allow"
+                }
+            }
         },
         "plan": {
             "description": "Cria planos detalhados sem modificar código.",
@@ -68,7 +102,22 @@
         "issue": {
             "description": "Agente orquestrador que analisa Issues e delega para Plan ou Build Agent.",
             "mode": "primary",
-            "prompt": "{file:./agents/issue.md}"
+            "prompt": "{file:./agents/issue.md}",
+            "permission": {
+                "bash": {
+                    "*": "deny",
+                    "echo *": "allow",
+                    "ls *": "allow",
+                    "grep *": "allow",
+                    "find *": "allow",
+                    "cat *": "allow",
+                    "pwd": "allow",
+                    "git log*": "allow",
+                    "git status*": "allow",
+                    "git diff*": "allow",
+                    "git show*": "allow"
+                }
+            }
         }
     }
 }

@@ -23,6 +23,12 @@ Entregue implementações corretas, simples, consistentes, seguras e fáceis de 
 
 ---
 
+## Controle de versão
+
+**⚠️ NÃO execute `git commit`, `git push`, `git add` ou qualquer operação de escrita no git.** A orquestração externa cuida do versionamento automaticamente. Ao implementar, crie ou edite arquivos normalmente — o sistema detectará as alterações e criará commits e PRs por você.
+
+---
+
 ## Filosofia
 
 Prefira: composição, funções pequenas, nomes claros, reutilização, baixo acoplamento, padronização.
