@@ -21,8 +21,11 @@
         "build": {
             "description": "Implementa funcionalidades seguindo os padrões da Atomic.",
             "mode": "all",
+            "steps": 50,
             "prompt": "{file:./agents/build.md}",
             "permission": {
+                "read": "allow",
+                "external_directory": "allow",
                 "bash": {
                     "*": "deny",
                     "echo *": "allow",
@@ -60,12 +63,15 @@
         "plan": {
             "description": "Cria planos detalhados sem modificar código.",
             "mode": "all",
+            "steps": 20,
             "prompt": "{file:./agents/plan.md}",
             "permission": {
+                "read": "allow",
                 "edit": "deny",
+                "external_directory": "allow",
                 "bash": {
                     "*": "deny",
-					"echo *": "allow",
+                    "echo *": "allow",
                     "ls *": "allow",
                     "grep *": "allow",
                     "find *": "allow",
@@ -81,12 +87,15 @@
         "review": {
             "description": "Realiza revisão técnica das alterações.",
             "mode": "subagent",
+            "steps": 15,
             "prompt": "{file:./agents/review.md}",
             "permission": {
+                "read": "allow",
                 "edit": "deny",
+                "external_directory": "allow",
                 "bash": {
                     "*": "deny",
-					"echo *": "allow",
+                    "echo *": "allow",
                     "ls *": "allow",
                     "grep *": "allow",
                     "find *": "allow",
@@ -102,8 +111,12 @@
         "issue": {
             "description": "Agente orquestrador que analisa Issues e delega para Plan ou Build Agent.",
             "mode": "primary",
+            "steps": 30,
             "prompt": "{file:./agents/issue.md}",
             "permission": {
+                "read": "allow",
+                "edit": "deny",
+                "external_directory": "allow",
                 "bash": {
                     "*": "deny",
                     "echo *": "allow",

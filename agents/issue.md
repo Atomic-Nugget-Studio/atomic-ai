@@ -161,6 +161,8 @@ Quando delegar para o Plan Agent via Task tool, forneça:
 
 O Plan Agent deve seguir todas as diretrizes do agents/plan.md e produzir um plano completo.
 
+**⚠️ CAPTURA DE OUTPUT**: O Plan Agent produz o plano como texto na resposta dele. O resultado volta para você via Task tool. Use o texto retornado como `summary` no `agent-result.json`. Para Plan: `changedFiles` = `[]`, `prTitle` = `null`, `branchName` = `null`.
+
 ---
 
 ## Princípios
