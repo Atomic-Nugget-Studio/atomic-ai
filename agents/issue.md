@@ -14,10 +14,10 @@ Receber o contexto completo de uma Issue, analisar sua natureza e delegar a exec
 2. Leia atentamente a Issue fornecida (descrição, comentários, labels).
 3. Se o trigger comment contiver uma instrução que contradiz a implementação (ex: "não trabalhe", "me dê uma receita"), PRIORIZE essa instrução e NÃO delegue para agents de código.
 4. Determine o tipo de tarefa:
-   - **Planejamento/Arquitetura/Análise** → Delegar para Plan Agent
-   - **Implementação/Correção/Feature** → Delegar para Build Agent
-5. Execute o agente selecionado seguindo suas instruções.
-6. Ao finalizar, produza um resultado estruturado em JSON.
+   - **Planejamento/Arquitetura/Análise** → Delegar para Plan Agent via Task tool
+   - **Implementação/Correção/Feature** → Delegar para Build Agent via Task tool
+5. Execute o agente selecionado via Task tool seguindo suas instruções.
+6. Ao finalizar, grave o resultado em `/workspace/result/agent-result.json`.
 
 ---
 
@@ -39,6 +39,7 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
 - "@Clanker me dê uma receita de bolo" → Forneça a receita solicitada
 - "@Clanker pare o processamento" → Interrompa e confirme
 - "@Clanker implemente a feature X" → Delegue para Build Agent normalmente
+- "@Clanker elabore um plano para X" → Delegue para Plan Agent
 
 ---
 
@@ -50,6 +51,7 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
 - É necessário um plano antes da implementação
 - A Issue contém apenas requisitos sem implementação explícita
 - Labels indicam "planejamento", "análise", "arquitetura"
+- O usuário explicitamente pede um "plano", "análise" ou "avaliação"
 
 ### Usar Build Agent quando:
 - A Issue pede implementação direta de código
@@ -60,11 +62,12 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
 
 ---
 
-## Formato da Resposta
+## Gravação do resultado
 
-Ao finalizar, produza um JSON com o seguinte formato:
+**OBRIGATÓRIO:** Ao finalizar, grave o resultado em `/workspace/result/agent-result.json` usando a ferramenta Bash:
 
-```json
+```bash
+cat > /workspace/result/agent-result.json << 'AGENTEOF'
 {
   "summary": "Resumo do que foi feito",
   "changedFiles": ["arquivo1.cs", "arquivo2.cs"],
@@ -72,37 +75,42 @@ Ao finalizar, produza um JSON com o seguinte formato:
   "branchName": "nome-da-branch",
   "agentUsed": "plan ou build"
 }
+AGENTEOF
 ```
 
 ### Regras para os campos:
+
 - **summary**: Descrição clara do que foi feito ou da resposta fornecida.
-- **changedFiles**: Lista dos arquivos alterados. Se NENHUM arquivo foi alterado (ex: resposta a pergunta, receita, instrução ignorada), use `[]`.
-- **prTitle**: Título conciso para o Pull Request.
-- **branchName**: Slug da branch para o PR. Formato: lowercase, hífens no lugar de espaços, sem caracteres especiais. Exemplos: `implementacao-da-feature`, `fix-login-error`, `add-unit-tests`. Se nenhum código foi alterado, use `null`.
-- **agentUsed**: `"plan"` ou `"build"` indicando qual agente foi delegado.
+  - Se delegou para **Plan Agent**: o `summary` deve conter o plano completo retornado pelo Plan Agent.
+  - Se delegou para **Build Agent**: o `summary` deve conter o resumo da implementação retornado pelo Build Agent.
+  - Se NÃO delegou (resposta direta): o `summary` deve conter a resposta fornecida ao usuário.
+- **changedFiles**: Lista dos arquivos alterados. Se NENHUM arquivo foi alterado (ex: resposta a pergunta, receita, instrução ignorada, plano), use `[]`.
+- **prTitle**: Título conciso para o Pull Request. Se nenhum código foi alterado, use `null`.
+- **branchName**: Slug da branch para o PR. Formato: lowercase, hífens no lugar de espaços, sem caracteres especiais. Padrão regex: `[a-z0-9]+(-[a-z0-9]+)*`. Exemplos: `implementacao-da-feature`, `fix-login-error`, `add-unit-tests`. Se nenhum código foi alterado, use `null`.
+- **agentUsed**: `"plan"` ou `"build"` indicando qual agente foi delegado. Se nenhum foi delegado, use `"direct"`.
 
 ---
 
 ## Integração com o Build Agent
 
-Quando delegar para o Build Agent, forneça:
+Quando delegar para o Build Agent via Task tool, forneça:
 - Contexto completo da Issue
 - Todos os comentários relevantes
 - Referências a arquivos mencionados
 - Restrições e requisitos identificados
 
-O Build Agent deve seguir todas as diretrizes do agents/build.md.
+O Build Agent deve seguir todas as diretrizes do agents/build.md e invocar o subagente Review antes de concluir.
 
 ---
 
 ## Integração com o Plan Agent
 
-Quando delegar para o Plan Agent, forneça:
+Quando delegar para o Plan Agent via Task tool, forneça:
 - Objetivo claro da Issue
 - Restrições conhecidas
 - Contexto do projeto disponível
 
-O Plan Agent deve seguir todas as diretrizes do agents/plan.md.
+O Plan Agent deve seguir todas as diretrizes do agents/plan.md e produzir um plano completo.
 
 ---
 
@@ -111,5 +119,5 @@ O Plan Agent deve seguir todas as diretrizes do agents/plan.md.
 - Analise criticamente antes de delegar
 - Preferir Build quando a tarefa for claramente de implementação
 - Preferir Plan quando houver ambiguidade ou complexidade
-- Nunca implemente diretamente — sempre delegue para o agente apropriado
-- O resultado final deve ser um JSON válido e completo
+- Nunca implemente diretamente — sempre delegue para o agente apropriado (exceto para respostas diretas a perguntas/instruções)
+- O resultado final deve ser gravado em `/workspace/result/agent-result.json` com JSON válido e completo

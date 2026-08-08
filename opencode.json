@@ -1,5 +1,6 @@
 {
     "$schema": "https://opencode.ai/config.json",
+    "subagent_depth": 2,
     "provider": {
         "atomic": {
             "npm": "@ai-sdk/openai-compatible",
@@ -19,12 +20,12 @@
     "agent": {
         "build": {
             "description": "Implementa funcionalidades seguindo os padrões da Atomic.",
-            "mode": "primary",
+            "mode": "all",
             "prompt": "{file:./agents/build.md}"
         },
         "plan": {
             "description": "Cria planos detalhados sem modificar código.",
-            "mode": "primary",
+            "mode": "all",
             "prompt": "{file:./agents/plan.md}",
             "permission": {
                 "edit": "deny",
