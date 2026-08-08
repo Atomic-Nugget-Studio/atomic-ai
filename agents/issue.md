@@ -39,8 +39,9 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
 - **prTitle** (obrigatório): Título conciso para o Pull Request. Se nenhum código foi alterado, use `null`.
 - **branchName** (obrigatório): Slug da branch para o PR. Formato: lowercase, hífens no lugar de espaços, sem caracteres especiais. Padrão regex: `[a-z0-9]+(-[a-z0-9]+)*`. Exemplos: `implementacao-da-feature`, `fix-login-error`, `add-unit-tests`. Se nenhum código foi alterado, use `null`.
   - **⚠️ REGRA CRÍTICA**: `branchName` DEVE ser um slug NOVO e ÚNICO. **NUNCA** use o branch base da issue (ex: `issue/1`) como `branchName`. Isso causa falha na criação do PR.
-  - ✅ Correto: `"branchName": "receita-de-bolo-de-chocolate"`
-  - ✅ Correto: `"branchName": "fix-login-error"`
+  - **⚠️ REGRA DE COERÊNCIA**: Se `changedFiles` contém arquivos, `branchName` DEVE ser um slug (nunca `null`). Se você criou ou alterou um arquivo, PRECISA de uma branch para o PR.
+  - ✅ Correto: `"changedFiles": ["receita.md"], "branchName": "receita-de-bolo"` (coerente)
+  - ❌ INCORRETO: `"changedFiles": ["receita.md"], "branchName": null` (INCOERENTE — criou arquivo mas não tem branch)
   - ❌ INCORRETO: `"branchName": "issue/1"` (este é o branch base, não um slug)
   - ❌ INCORRETO: `"branchName": "main"` (este é o branch principal)
 - **agentUsed** (obrigatório): `"plan"` ou `"build"` indicando qual agente foi delegado. Se nenhum foi delegado, use `"direct"`.
@@ -69,7 +70,8 @@ Antes de executar o comando `cat`, verifique:
 3. ✅ `prTitle` é string ou `null`?
 4. ✅ `branchName` é slug ou `null`?
 5. ✅ `branchName` NÃO contém `issue/` nem `main`? (se contém, é ERRO — use um slug novo)
-6. ✅ `agentUsed` é `"plan"`, `"build"` ou `"direct"`?
+6. ✅ **SE `changedFiles` tem arquivos, `branchName` NÃO é `null`?** (coerência obrigatória)
+7. ✅ `agentUsed` é `"plan"`, `"build"` ou `"direct"`?
 
 Se QUALQUER resposta for "não", corrija antes de gravar.
 
