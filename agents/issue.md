@@ -38,6 +38,11 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
 - **changedFiles** (obrigatório): Lista dos arquivos alterados. Se NENHUM arquivo foi alterado (ex: resposta a pergunta, receita, plano, instrução ignorada), use `[]`.
 - **prTitle** (obrigatório): Título conciso para o Pull Request. Se nenhum código foi alterado, use `null`.
 - **branchName** (obrigatório): Slug da branch para o PR. Formato: lowercase, hífens no lugar de espaços, sem caracteres especiais. Padrão regex: `[a-z0-9]+(-[a-z0-9]+)*`. Exemplos: `implementacao-da-feature`, `fix-login-error`, `add-unit-tests`. Se nenhum código foi alterado, use `null`.
+  - **⚠️ REGRA CRÍTICA**: `branchName` DEVE ser um slug NOVO e ÚNICO. **NUNCA** use o branch base da issue (ex: `issue/1`) como `branchName`. Isso causa falha na criação do PR.
+  - ✅ Correto: `"branchName": "receita-de-bolo-de-chocolate"`
+  - ✅ Correto: `"branchName": "fix-login-error"`
+  - ❌ INCORRETO: `"branchName": "issue/1"` (este é o branch base, não um slug)
+  - ❌ INCORRETO: `"branchName": "main"` (este é o branch principal)
 - **agentUsed** (obrigatório): `"plan"` ou `"build"` indicando qual agente foi delegado. Se nenhum foi delegado, use `"direct"`.
 
 ### Como gravar
@@ -63,7 +68,8 @@ Antes de executar o comando `cat`, verifique:
 2. ✅ `changedFiles` é um array (mesmo que vazio `[]`)?
 3. ✅ `prTitle` é string ou `null`?
 4. ✅ `branchName` é slug ou `null`?
-5. ✅ `agentUsed` é `"plan"`, `"build"` ou `"direct"`?
+5. ✅ `branchName` NÃO contém `issue/` nem `main`? (se contém, é ERRO — use um slug novo)
+6. ✅ `agentUsed` é `"plan"`, `"build"` ou `"direct"`?
 
 Se QUALQUER resposta for "não", corrija antes de gravar.
 
@@ -109,6 +115,7 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
    - **Implementação/Correção/Feature** → Delegar para Build Agent via Task tool
 6. Execute o agente selecionado via Task tool seguindo suas instruções.
 7. **GRAVE o resultado em `/workspace/result/agent-result.json` com TODOS os campos obrigatórios.**
+8. **VERIFIQUE** antes de gravar: `branchName` não contém `issue/` nem `main` (use slug novo)
 
 ---
 
@@ -163,3 +170,4 @@ O Plan Agent deve seguir todas as diretrizes do agents/plan.md e produzir um pla
 - Respostas diretas (perguntas, explicações, documentação em texto) ficam no comentário da issue, sem commits
 - Nunca implemente diretamente quando a tarefa for complexa — sempre delegue para o agente apropriado
 - **O resultado final DEVE ser gravado em `/workspace/result/agent-result.json` com JSON válido e TODOS os campos obrigatórios**
+- **`branchName` DEVE ser um slug novo** — NUNCA use o branch base da issue (`issue/{N}`) nem `main`
