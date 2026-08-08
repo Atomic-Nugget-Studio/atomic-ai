@@ -63,6 +63,11 @@
                     "pwd": "allow"
                 }
             }
+        },
+        "issue": {
+            "description": "Agente orquestrador que analisa Issues e delega para Plan ou Build Agent.",
+            "mode": "primary",
+            "prompt": "{file:./agents/issue.md}"
         }
     }
 }
