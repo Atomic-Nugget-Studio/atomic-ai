@@ -123,12 +123,12 @@
                     "ls *": "allow",
                     "grep *": "allow",
                     "find *": "allow",
-                    "cat *": "allow",
                     "pwd": "allow",
                     "git log*": "allow",
                     "git status*": "allow",
                     "git diff*": "allow",
-                    "git show*": "allow"
+                    "git show*": "allow",
+                    "node -e *": "allow"
                 }
             }
         }
