@@ -49,6 +49,7 @@
             "prompt": "{file:./agents/build.md}",
             "permission": {
                 "read": "allow",
+                "edit": "allow",
                 "external_directory": "allow",
                 "bash": {
                     "*": "deny",
