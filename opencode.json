@@ -110,6 +110,7 @@
         },
         "issue": {
             "description": "Agente orquestrador que analisa Issues e delega para Plan ou Build Agent.",
+            "hidden": true,
             "mode": "primary",
             "steps": 30,
             "prompt": "{file:./agents/issue.md}",

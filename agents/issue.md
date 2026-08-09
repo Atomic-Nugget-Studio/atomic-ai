@@ -32,7 +32,7 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
 
 ### Regras para os campos:
 
-- **summary** (obrigatório): Descrição clara do que foi feito ou da resposta fornecida.
+- **summary** (obrigatório): Descrição clara do que foi feito ou da resposta fornecida. **Escreva em MARKDOWN** (headers `##`, lists `-`, bold `**`, code blocks `` ` ``). O sistema preserva o conteúdo exato e o Forgejo renderiza como markdown.
   - Se delegou para **Plan Agent**: o `summary` deve conter o plano completo retornado pelo Plan Agent.
   - Se delegou para **Build Agent**: o `summary` deve conter o resumo da implementação retornado pelo Build Agent.
   - Se o próprio agente respondeu a uma pergunta: o `summary` deve conter a resposta fornecida ao usuário.
