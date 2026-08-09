@@ -18,6 +18,30 @@
     "model": "atomic/auto",
     "small_model": "atomic/auto",
     "agent": {
+		"plan": {
+            "description": "Cria planos detalhados sem modificar código.",
+            "mode": "all",
+            "steps": 20,
+            "prompt": "{file:./agents/plan.md}",
+            "permission": {
+                "read": "allow",
+                "edit": "deny",
+                "external_directory": "allow",
+                "bash": {
+                    "*": "deny",
+                    "echo *": "allow",
+                    "ls *": "allow",
+                    "grep *": "allow",
+                    "find *": "allow",
+                    "git log*": "allow",
+                    "git status*": "allow",
+                    "git diff*": "allow",
+                    "git show*": "allow",
+                    "cat *": "allow",
+                    "pwd": "allow"
+                }
+            }
+        },
         "build": {
             "description": "Implementa funcionalidades seguindo os padrões da Atomic.",
             "mode": "all",
@@ -60,34 +84,11 @@
                 }
             }
         },
-        "plan": {
-            "description": "Cria planos detalhados sem modificar código.",
-            "mode": "all",
-            "steps": 20,
-            "prompt": "{file:./agents/plan.md}",
-            "permission": {
-                "read": "allow",
-                "edit": "deny",
-                "external_directory": "allow",
-                "bash": {
-                    "*": "deny",
-                    "echo *": "allow",
-                    "ls *": "allow",
-                    "grep *": "allow",
-                    "find *": "allow",
-                    "git log*": "allow",
-                    "git status*": "allow",
-                    "git diff*": "allow",
-                    "git show*": "allow",
-                    "cat *": "allow",
-                    "pwd": "allow"
-                }
-            }
-        },
         "review": {
             "description": "Realiza revisão técnica das alterações.",
-            "mode": "subagent",
+            "mode": "all",
             "steps": 15,
+			"color": "#A855F7",
             "prompt": "{file:./agents/review.md}",
             "permission": {
                 "read": "allow",
