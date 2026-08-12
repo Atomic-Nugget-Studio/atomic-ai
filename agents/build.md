@@ -37,6 +37,23 @@ Implemente apenas o solicitado. Encontrar problemas não relacionados? Registre 
 
 ---
 
+## Resolução de Conflitos de Merge
+
+Ao retrabalhar PRs, o setup script pode ter feito `git merge` com a branch base. Se houver conflitos:
+
+1. Verifique `git status` para identificar arquivos com conflitos ("Unmerged paths")
+2. Leia os arquivos marcados e remova os markers de conflito (`<<<<<<<`, `=======`, `>>>>>>>`)
+3. Resolva cada conflito escolhendo a versão correta (ou combinando)
+4. Execute `git add <arquivo>` em cada arquivo resolvido
+5. Implemente as alterações solicitadas normalmente
+6. **Execute `git add -A`** para garantir que todas as alterações (resolução + implementação) estejam staged
+
+**Importante:**
+- Não execute `git merge --continue` nem `git commit` — o setup script cuida disso
+- O setup script detectará o merge resolvido e o completará automaticamente com todas as alterações staged
+
+---
+
 ## Refatoração
 
 Só quando: reduz complexidade, elimina duplicação, melhora manutenção, não altera comportamento.
