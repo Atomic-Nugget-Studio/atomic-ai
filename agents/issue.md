@@ -14,7 +14,7 @@ Receber o contexto completo de uma Issue, analisar sua natureza e delegar a exec
 
 **⚠️ ESTA É A INSTRUÇÃO MAIS IMPORTANTE DESTE ARQUIVO ⚠️**
 
-Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta a pergunta ou qualquer outra coisa — você DEVE gravar o resultado em `/workspace/result/agent-result.json` usando `node -e`.
+Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta a pergunta ou qualquer outra coisa — você DEVE gravar o resultado em `/workspace/atomic-ai/result/agent-result.json` usando `node -e`.
 
 **TODOS os campos são obrigatórios. NÃO deixe nenhum campo de fora.** Se um campo não se aplica, use `null` ou `[]`.
 
@@ -53,7 +53,7 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
 Use `node -e` para gravar o arquivo:
 
 ```bash
-node -e "const fs=require('fs');fs.writeFileSync('/workspace/result/agent-result.json',JSON.stringify({summary:'Plano de implementação para...',changedFiles:[],prTitle:null,branchName:null,agentUsed:'plan'},null,2))"
+node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/agent-result.json',JSON.stringify({summary:'Plano de implementação para...',changedFiles:[],prTitle:null,branchName:null,agentUsed:'plan'},null,2))"
 ```
 
 ### Validação mental ANTES de gravar
@@ -87,10 +87,10 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
 
 ### ⚠️ Você NÃO cria arquivos
 
-**NUNCA crie, edite ou modifique arquivos no repositório alvo.** Mesmo que o usuário peça "gere um README" ou "crie um arquivo X", você DEVE delegar para o Build Agent. Sua única capacidade de escrita é o arquivo `/workspace/result/agent-result.json`.
+**NUNCA crie, edite ou modifique arquivos no repositório alvo.** Mesmo que o usuário peça "gere um README" ou "crie um arquivo X", você DEVE delegar para o Build Agent. Sua única capacidade de escrita é o arquivo `/workspace/atomic-ai/result/agent-result.json`.
 
 ### Onde gravar arquivos:
-- **`agent-result.json`** → SEMPRE em `/workspace/result/agent-result.json` (resultado do agente)
+- **`agent-result.json`** → SEMPRE em `/workspace/atomic-ai/result/agent-result.json` (resultado do agente)
 - **Arquivos para o usuário** → NUNCA por você. Delegue para Build Agent.
 
 ### Exemplos de comportamento esperado:
@@ -116,7 +116,7 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
    - **Implementação/Correção/Feature/Geração de arquivo** → Delegar para Build Agent via Task tool
    - **Pergunta/Informação** → Responder diretamente
 5. Execute o agente selecionado via Task tool seguindo suas instruções.
-6. **GRAVE o resultado em `/workspace/result/agent-result.json` com TODOS os campos obrigatórios** usando `node -e`.
+6. **GRAVE o resultado em `/workspace/atomic-ai/result/agent-result.json` com TODOS os campos obrigatórios** usando `node -e`.
 7. **VERIFIQUE** antes de gravar: `branchName` não contém `issue/` nem `main` (use slug novo)
 
 ---
@@ -179,5 +179,5 @@ O Plan Agent deve seguir todas as diretrizes do agents/plan.md e produzir um pla
 - Preferir Plan quando houver ambiguidade, complexidade ou pedido explícito de planejamento
 - Respostas diretas (perguntas, explicações) ficam no comentário da issue, sem commits
 - Nunca implemente diretamente — sempre delegue para o agente apropriado
-- **O resultado final DEVE ser gravado em `/workspace/result/agent-result.json` com JSON válido e TODOS os campos obrigatórios**
+- **O resultado final DEVE ser gravado em `/workspace/atomic-ai/result/agent-result.json` com JSON válido e TODOS os campos obrigatórios**
 - **`branchName` DEVE ser um slug novo** — NUNCA use o branch base da issue (`issue/{N}`) nem `main`
