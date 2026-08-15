@@ -39,18 +39,37 @@ Implemente apenas o solicitado. Encontrar problemas não relacionados? Registre 
 
 ## Resolução de Conflitos de Merge
 
-Ao retrabalhar PRs, o setup script pode ter feito `git merge` com a branch base. Se houver conflitos:
+O setup script sincroniza automaticamente a branch antes de você executar:
+- **Issues**: sincroniza `issue/{N}` com a branch principal (ex: `main`)
+- **PRs**: sincroniza `ai/{name}` com `issue/{N}` (branch alvo do PR)
 
-1. Verifique `git status` para identificar arquivos com conflitos ("Unmerged paths")
-2. Leia os arquivos marcados e remova os markers de conflito (`<<<<<<<`, `=======`, `>>>>>>>`)
-3. Resolva cada conflito escolhendo a versão correta (ou combinando)
+Se houver conflitos, eles estarão no working tree quando você iniciar.
+
+### Fluxo obrigatório ao iniciar
+
+**PRIMEIRO**, verifique se há conflitos de merge antes de qualquer trabalho:
+
+```bash
+git status
+```
+
+Se houver seção "Unmerged paths" (arquivos com conflitos), resolva-os ANTES de implementar qualquer alteração:
+
+1. Identifique os arquivos com conflitos ("Unmerged paths" no `git status`)
+2. Leia cada arquivo e remova os markers de conflito (`<<<<<<<`, `=======`, `>>>>>>>`)
+3. Resolva cada conflito escolhendo a versão correta ou combinando-as
 4. Execute `git add <arquivo>` em cada arquivo resolvido
-5. Implemente as alterações solicitadas normalmente
-6. **Execute `git add -A`** para garantir que todas as alterações (resolução + implementação) estejam staged
+5. Verifique com `git status` que não há mais "Unmerged paths"
 
-**Importante:**
-- Não execute `git merge --continue` nem `git commit` — o setup script cuida disso
+**DEPOIS** de resolver todos os conflitos (ou se não houver conflitos), implemente as alterações solicitadas normalmente.
+
+**POR ÚLTIMO**, execute `git add -A` para garantir que todas as alterações (resolução + implementação) estejam staged.
+
+### Regra crítica
+
+- **NÃO** execute `git commit`, `git merge --continue` nem `git merge --abort` — o setup script cuida disso
 - O setup script detectará o merge resolvido e o completará automaticamente com todas as alterações staged
+- Se houver conflitos não resolvidos, o setup script abortará o merge e criará o PR com suas alterações
 
 ---
 

@@ -60,12 +60,14 @@ node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/ag
 
 Antes de executar o comando `node -e`, verifique:
 1. ✅ `summary` tem conteúdo significativo?
-2. ✅ `changedFiles` é um array (mesmo que vazio `[]`)?
-3. ✅ `prTitle` é string ou `null`?
-4. ✅ `branchName` é slug ou `null`?
-5. ✅ `branchName` NÃO contém `issue/` nem `main`? (se contém, é ERRO — use um slug novo)
-6. ✅ **SE `changedFiles` tem arquivos, `branchName` NÃO é `null`?** (coerência obrigatória)
-7. ✅ `agentUsed` é `"plan"` ou `"build"`? (NÃO use `"direct"` — este valor não existe)
+2. ✅ `summary` NÃO é uma string genérica como `"test"`, `"ok"`, `"feito"`, `"done"`, `"implementado"`, `"alterações feitas"` ou similares? (se for, REESCREVA com uma descrição real do que foi feito)
+3. ✅ `changedFiles` é um array (mesmo que vazio `[]`)?
+4. ✅ **SE o Build Agent alterou ou criou arquivos, `changedFiles` contém a lista desses arquivos?** (extraia do output do Build Agent, NÃO use `[]`)
+5. ✅ `prTitle` é string ou `null`?
+6. ✅ `branchName` é slug ou `null`?
+7. ✅ `branchName` NÃO contém `issue/` nem `main`? (se contém, é ERRO — use um slug novo)
+8. ✅ **SE `changedFiles` tem arquivos, `branchName` NÃO é `null`?** (coerência obrigatória)
+9. ✅ `agentUsed` é `"plan"` ou `"build"`? (NÃO use `"direct"` — este valor não existe)
 
 Se QUALQUER resposta for "não", corrija antes de gravar.
 
@@ -155,6 +157,26 @@ Quando delegar para o Build Agent via Task tool, forneça:
 - Restrições e requisitos identificados
 
 O Build Agent deve seguir todas as diretrizes do agents/build.md e invocar o subagente Review antes de concluir.
+
+**⚠️ CAPTURA DE OUTPUT**: O Build Agent retorna o resultado como texto via Task tool, com seções: **Resumo**, **Arquivos alterados**, **Decisões** e **Limitações**. Você DEVE extrair essas seções e mapeá-las para o `agent-result.json`:
+
+| Campo do JSON | Fonte no output do Build Agent |
+|---------------|-------------------------------|
+| `summary` | Seção **Resumo** — use o texto completo como summary (escreva em MARKDOWN) |
+| `changedFiles` | Seção **Arquivos alterados** — extraia os nomes dos arquivos listados como array de strings |
+| `prTitle` | Gere um título conciso (máximo 72 chars) baseado no Resumo |
+| `branchName` | Gere um slug novo a partir do Resumo — lowercase, hífens, sem caracteres especiais, regex: `[a-z0-9]+(-[a-z0-9]+)*` |
+| `agentUsed` | `"build"` |
+
+**⚠️ REGRA CRÍTICA**: Se o Build Agent alterou ou criou arquivos, `changedFiles` NÃO pode ser `[]` e `branchName` NÃO pode ser `null`. Extraia os arquivos do output do Build Agent — NÃO invente nem omita.
+
+**⚠️ REGRA DE QUALIDADE**: O `summary` DEVE ser uma descrição significativa do que foi implementado. **NUNCA** use strings genéricas como `"test"`, `"ok"`, `"feito"`, `"done"`, `"implementado"`, `"alterações feitas"` ou similares. Se o Resumo do Build Agent for curto demais, expanda-o descrevendo o que foi feito. Inclua **Decisões** e **Limitações** do Build Agent no `summary` quando relevantes (como seções adicionais em markdown).
+
+Exemplo de comando `node -e` com Build Agent:
+
+```bash
+node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/agent-result.json',JSON.stringify({summary:'## Resumo\n\nRemovido o serviço X e refactorizado o componente Y para usar detecção direta de repositórios.\n\n## Arquivos alterados\n\n- `arquivo1.cs` — removido\n- `arquivo2.cs` — refatorado',changedFiles:['arquivo1.cs','arquivo2.cs'],prTitle:'Refactor: remover serviço X e usar detecção direta',branchName:'refactor-remover-servico-x',agentUsed:'build'},null,2))"
+```
 
 ---
 
