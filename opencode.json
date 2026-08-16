@@ -37,6 +37,7 @@
                     "git status*": "allow",
                     "git diff*": "allow",
                     "git show*": "allow",
+                    "git submodule*": "allow",
                     "cat *": "allow",
                     "pwd": "allow"
                 }
@@ -66,6 +67,7 @@
                     "git diff*": "allow",
                     "git show*": "allow",
                     "git add *": "allow",
+                    "git submodule*": "allow",
                     "dotnet*": "allow",
                     "npm*": "allow",
                     "npx*": "allow",
@@ -106,6 +108,7 @@
                     "git status*": "allow",
                     "git diff*": "allow",
                     "git show*": "allow",
+                    "git submodule*": "allow",
                     "cat *": "allow",
                     "pwd": "allow"
                 }
@@ -132,6 +135,7 @@
                     "git status*": "allow",
                     "git diff*": "allow",
                     "git show*": "allow",
+                    "git submodule*": "allow",
                     "node -e *": "allow"
                 }
             }

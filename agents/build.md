@@ -40,8 +40,8 @@ Implemente apenas o solicitado. Encontrar problemas não relacionados? Registre 
 ## Resolução de Conflitos de Merge
 
 O setup script sincroniza automaticamente a branch antes de você executar:
-- **Issues**: sincroniza `issue/{N}` com a branch principal (ex: `main`)
-- **PRs**: sincroniza `ai/{name}` com `issue/{N}` (branch alvo do PR)
+- **Issues**: sincroniza `task/{N}` com a branch principal (ex: `main`)
+- **PRs**: sincroniza `task/{N}/{slug}` com `task/{N}` (branch alvo do PR)
 
 Se houver conflitos, eles estarão no working tree quando você iniciar.
 
@@ -96,6 +96,7 @@ Quando existirem: atualize e execute-os. Quando não existirem: sugira apenas qu
 Ao finalizar, informe:
 - **Resumo**: o que foi implementado
 - **Arquivos alterados**: lista dos arquivos
+- **Submódulos alterados** (se aplicável): lista dos paths dos submódulos que foram modificados
 - **Decisões**: justifique escolhas importantes
 - **Limitações**: o que ficou pendente
 

@@ -27,7 +27,9 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
   "prTitle": "string ou null — obrigatório",
   "commitMessages": ["array de strings — obrigatório quando há alterações de código"],
   "branchName": "string ou null — obrigatório",
-  "agentUsed": "string — obrigatório"
+  "agentUsed": "string — obrigatório",
+  "changedSubmodules": ["array de strings — opcional"],
+  "submoduleCommitMessages": {"caminho-do-submódulo": "mensagem de commit — opcional"}
 }
 ```
 
@@ -46,13 +48,23 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
   - ❌ INCORRETO: `"commitMessages": ["feat: add email validation"]` (prefixo + inglês)
   - ❌ INCORRETO: `"commitMessages": ["test"]` (genérico demais)
 - **branchName** (obrigatório): Slug da branch para o PR. Formato: lowercase, hífens no lugar de espaços, sem caracteres especiais. Padrão regex: `[a-z0-9]+(-[a-z0-9]+)*`. Exemplos: `implementacao-da-feature`, `fix-login-error`, `add-unit-tests`. Se nenhum código foi alterado, use `null`.
-  - **⚠️ REGRA CRÍTICA**: `branchName` DEVE ser um slug NOVO e ÚNICO. **NUNCA** use o branch base da issue (ex: `issue/1`) como `branchName`. Isso causa falha na criação do PR.
+  - **⚠️ REGRA CRÍTICA**: `branchName` DEVE ser um slug NOVO e ÚNICO. **NUNCA** use o branch base da issue (ex: `task/1`) como `branchName`. Isso causa falha na criação do PR.
   - **⚠️ REGRA DE COERÊNCIA**: Se `changedFiles` contém arquivos, `branchName` DEVE ser um slug (nunca `null`). Se o Build Agent criou ou alterou um arquivo, PRECISA de uma branch para o PR.
   - ✅ Correto: `"changedFiles": ["receita.md"], "branchName": "receita-de-bolo"` (coerente)
   - ❌ INCORRETO: `"changedFiles": ["receita.md"], "branchName": null` (INCOERENTE — criou arquivo mas não tem branch)
-  - ❌ INCORRETO: `"branchName": "issue/1"` (este é o branch base, não um slug)
+  - ❌ INCORRETO: `"branchName": "task/1"` (este é o branch base, não um slug)
   - ❌ INCORRETO: `"branchName": "main"` (este é o branch principal)
 - **agentUsed** (obrigatório): `"plan"` ou `"build"` indicando qual agente foi delegado. Se o próprio agente respondeu a uma pergunta sem delegar, use `"issue"`.
+- **changedSubmodules** (opcional): Array de strings com os paths dos submódulos que foram alterados. Use quando o repositório contém submódulos git e o Build Agent alterou arquivos dentro deles. Cada item é o caminho relativo do submódulo (ex: `"atomic-api"`, `"gastronauta"`). Este campo é **informativo** — o setup script detecta submódulos alterados via comandos git (`git status`, `git diff`), mas este campo serve como referência para o Issue Agent ao montar o resultado.
+  - ✅ Correto: `"changedSubmodules": ["atomic-api", "gastronauta"]` (dois submódulos alterados)
+  - ✅ Correto: `"changedSubmodules": []` (nenhum submódulo alterado ou repo sem submódulos)
+  - ✅ Correto: omitir o campo (quando o repo não tem submódulos)
+  - ❌ INCORRETO: `"changedSubmodules": ["atomic-api/src/main.ts"]` (deve ser o path do submódulo, não de arquivos dentro dele)
+- **submoduleCommitMessages** (opcional): Objeto mapeando path do submódulo para mensagem de commit específica daquele submódulo. Use quando `changedSubmodules` contém mais de um submódulo — cada submódulo deve ter sua própria mensagem descritiva. Formato: `"submoduleCommitMessages": {"atomic-api": "Corrigir validação de e-mail", "gastronauta": "Atualizar testes do cardápio"}`. Regras: sempre em português, sem prefixos convencionais, verbo no infinitivo + contexto, máximo 72 caracteres por mensagem. Se `changedSubmodules` tem apenas 1 item ou está vazio, este campo pode ser omitido (o setup script usará `commitMessages[0]` como fallback).
+  - ✅ Correto: `"submoduleCommitMessages": {"atomic-api": "Corrigir validação de e-mail no cadastro", "gastronauta": "Atualizar testes unitários do cardápio"}`
+  - ✅ Correto: omitir quando há apenas 1 submódulo ou nenhum
+  - ❌ INCORRETO: `"submoduleCommitMessages": {"atomic-api": "feat: fix email"}` (prefixo convencional + inglês)
+  - ❌ INCORRETO: `"submoduleCommitMessages": {"atomic-api/src/main.ts": "msg"}` (path de arquivo, não de submódulo)
 
 ### Como gravar
 
@@ -72,9 +84,11 @@ Antes de executar o comando `node -e`, verifique:
 5. ✅ `prTitle` é string ou `null`?
 6. ✅ **SE o Build Agent alterou ou criou arquivos, `commitMessages` é um array não vazio?** (deve conter a mensagem do commit em português, sem prefixos convencionais)
 7. ✅ `branchName` é slug ou `null`?
-8. ✅ `branchName` NÃO contém `issue/` nem `main`? (se contém, é ERRO — use um slug novo)
+8. ✅ `branchName` NÃO contém `task/` nem `main`? (se contém, é ERRO — use um slug novo)
 9. ✅ **SE `changedFiles` tem arquivos, `branchName` NÃO é `null`?** (coerência obrigatória)
 10. ✅ `agentUsed` é `"plan"` ou `"build"`? (NÃO use `"direct"` — este valor não existe)
+11. ✅ **SE o Build Agent alterou arquivos dentro de submódulos, `changedSubmodules` contém os paths desses submódulos?** (extraia do output do Build Agent)
+12. ✅ **SE `changedSubmodules` tem mais de 1 item, `submoduleCommitMessages` é um objeto com uma mensagem específica para cada submódulo?** (se 1 submódulo ou nenhum, pode ser `{}` ou omitido)
 
 Se QUALQUER resposta for "não", corrija antes de gravar.
 
@@ -126,7 +140,7 @@ ANTES de delegar para Plan ou Build Agent, VERIFIQUE o Comentário que ativou o 
    - **Pergunta/Informação** → Responder diretamente
 5. Execute o agente selecionado via Task tool seguindo suas instruções.
 6. **GRAVE o resultado em `/workspace/atomic-ai/result/agent-result.json` com TODOS os campos obrigatórios** usando `node -e`.
-7. **VERIFIQUE** antes de gravar: `branchName` não contém `issue/` nem `main` (use slug novo)
+7. **VERIFIQUE** antes de gravar: `branchName` não contém `task/` nem `main` (use slug novo)
 
 ---
 
@@ -165,7 +179,7 @@ Quando delegar para o Build Agent via Task tool, forneça:
 
 O Build Agent deve seguir todas as diretrizes do agents/build.md e invocar o subagente Review antes de concluir.
 
-**⚠️ CAPTURA DE OUTPUT**: O Build Agent retorna o resultado como texto via Task tool, com seções: **Resumo**, **Arquivos alterados**, **Decisões** e **Limitações**. Você DEVE extrair essas seções e mapeá-las para o `agent-result.json`:
+**⚠️ CAPTURA DE OUTPUT**: O Build Agent retorna o resultado como texto via Task tool, com seções: **Resumo**, **Arquivos alterados**, **Submódulos alterados**, **Decisões** e **Limitações**. Você DEVE extrair essas seções e mapeá-las para o `agent-result.json`:
 
 | Campo do JSON | Fonte no output do Build Agent |
 |---------------|-------------------------------|
@@ -175,17 +189,19 @@ O Build Agent deve seguir todas as diretrizes do agents/build.md e invocar o sub
 | `commitMessages` | Gere a(s) mensagem(ns) de commit baseada(s) no Resumo — em português, sem prefixos convencionais, verbo no infinitivo + contexto, máximo 72 chars por item |
 | `branchName` | Gere um slug novo a partir do Resumo — lowercase, hífens, sem caracteres especiais, regex: `[a-z0-9]+(-[a-z0-9]+)*` |
 | `agentUsed` | `"build"` |
+| `changedSubmodules` | Seção **Submódulos alterados** — extraia os paths dos submódulos como array de strings. Se ausente, use `[]` |
+| `submoduleCommitMessages` | Se houver mais de 1 submódulo alterado, gere uma mensagem de commit específica para cada um — objeto mapeando path do submódulo para mensagem em português. Se ausente ou 1 submódulo, use `{}` |
 
 **⚠️ REGRA CRÍTICA**: Se o Build Agent alterou ou criou arquivos, `changedFiles` NÃO pode ser `[]`, `branchName` NÃO pode ser `null` e `commitMessages` NÃO pode ser `[]`. Extraia os arquivos do output do Build Agent — NÃO invente nem omita.
 
 **⚠️ REGRA DE QUALIDADE**: O `summary` DEVE ser uma descrição significativa do que foi implementado. **NUNCA** use strings genéricas como `"test"`, `"ok"`, `"feito"`, `"done"`, `"implementado"`, `"alterações feitas"` ou similares. Se o Resumo do Build Agent for curto demais, expanda-o descrevendo o que foi feito. Inclua **Decisões** e **Limitações** do Build Agent no `summary` quando relevantes (como seções adicionais em markdown).
 
-**⚠️ REGRA DE COMMIT**: As `commitMessages` DEVEM ser em português, sem prefixos convencionais (`feat:`, `fix:`, `chore:`, etc), com verbo no infinitivo + contexto claro. Cada mensagem deve ter no máximo 72 caracteres. Se o Build Agent fez múltiplos commits, inclua-os todos na ordem.
+**⚠️ REGRA DE COMMIT**: As `commitMessages` DEVEM ser em português, sem prefixos convencionais (`feat:`, `fix:`, `chore:`, etc), com verbo no infinitivo + contexto claro. Cada mensagem deve ter no máximo 72 caracteres. Se o Build Agent fez múltiplos commits, inclua-os todos na ordem. Quando houver mais de 1 submódulo alterado, gere também `submoduleCommitMessages` com uma mensagem específica para cada submódulo — descreva o que mudou naquele submódulo em particular.
 
 Exemplo de comando `node -e` com Build Agent:
 
 ```bash
-node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/agent-result.json',JSON.stringify({summary:'## Resumo\n\nRemovido o serviço X e refactorizado o componente Y para usar detecção direta de repositórios.\n\n## Arquivos alterados\n\n- `arquivo1.cs` — removido\n- `arquivo2.cs` — refatorado',changedFiles:['arquivo1.cs','arquivo2.cs'],prTitle:'Remover serviço X e usar detecção direta de repositórios',commitMessages:['Remover serviço X e refactorizar componente Y para detecção direta de repositórios'],branchName:'refactor-remover-servico-x',agentUsed:'build'},null,2))"
+node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/agent-result.json',JSON.stringify({summary:'## Resumo\n\nRemovido o serviço X e refactorizado o componente Y para usar detecção direta de repositórios.\n\n## Arquivos alterados\n\n- `arquivo1.cs` — removido\n- `arquivo2.cs` — refatorado',changedFiles:['arquivo1.cs','arquivo2.cs'],prTitle:'Remover serviço X e usar detecção direta de repositórios',commitMessages:['Remover serviço X e refactorizar componente Y para detecção direta de repositórios'],branchName:'refactor-remover-servico-x',agentUsed:'build',changedSubmodules:[],submoduleCommitMessages:{}},null,2))"
 ```
 
 ---
@@ -239,4 +255,4 @@ Quando o Build Agent fizer commits, as mensagens DEVEM seguir estas regras:
 - Respostas diretas (perguntas, explicações) ficam no comentário da issue, sem commits
 - Nunca implemente diretamente — sempre delegue para o agente apropriado
 - **O resultado final DEVE ser gravado em `/workspace/atomic-ai/result/agent-result.json` com JSON válido e TODOS os campos obrigatórios**
-- **`branchName` DEVE ser um slug novo** — NUNCA use o branch base da issue (`issue/{N}`) nem `main`
+- **`branchName` DEVE ser um slug novo** — NUNCA use o branch base da issue (`task/{N}`) nem `main`
