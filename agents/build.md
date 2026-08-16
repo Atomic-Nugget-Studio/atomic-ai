@@ -73,6 +73,31 @@ Se houver seção "Unmerged paths" (arquivos com conflitos), resolva-os ANTES de
 
 ---
 
+## Submódulos
+
+Se o repositório contém submódulos git (diretórios com `.git` como arquivo), siga estas regras:
+
+1. **NÃO inicialize submódulos desnecessariamente.** O setup script NÃO inicializa submódulos automaticamente — apenas os que você precisar para a tarefa.
+
+2. **Antes de criar/editar arquivos em um diretório de submódulo**, verifique se está inicializado:
+   ```bash
+   git -C caminho-do-submodulo rev-parse --git-dir 2>/dev/null
+   ```
+   - Se **falhar** (exit code != 0): o submódulo não está inicializado. Inicialize-o:
+     ```bash
+     git submodule init caminho-do-submodulo
+     git submodule update caminho-do-submodulo
+     ```
+   - Se **funcionar**: o submódulo já está pronto para uso.
+
+3. **Inicialize APENAS os submódulos que serão alterados.** Não inicialize todos — podem haver dezenas.
+
+4. **Commits dentro de submódulos**: ao finalizar alterações em um submódulo, faça `git add` e `git commit` DENTRO do diretório do submódulo. O setup script detectará as alterações e criará branches/PRs separados por submódulo.
+
+5. **Reporte submódulos alterados**: ao entregar o resultado, liste em `changedSubmodules` os paths dos submódulos que foram modificados.
+
+---
+
 ## Refatoração
 
 Só quando: reduz complexidade, elimina duplicação, melhora manutenção, não altera comportamento.

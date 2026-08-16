@@ -179,6 +179,8 @@ Quando delegar para o Build Agent via Task tool, forneça:
 
 O Build Agent deve seguir todas as diretrizes do agents/build.md e invocar o subagente Review antes de concluir.
 
+**⚠️ SUBMÓDULOS**: O setup script NÃO inicializa submódulos automaticamente — apenas os que o agente precisar. O Build Agent é responsável por inicializar (com `git submodule init <path> && git submodule update <path>`) apenas os submódulos que serão alterados. A autenticação está configurada automaticamente via URL rewrite no setup script.
+
 **⚠️ CAPTURA DE OUTPUT**: O Build Agent retorna o resultado como texto via Task tool, com seções: **Resumo**, **Arquivos alterados**, **Submódulos alterados**, **Decisões** e **Limitações**. Você DEVE extrair essas seções e mapeá-las para o `agent-result.json`:
 
 | Campo do JSON | Fonte no output do Build Agent |
