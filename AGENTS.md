@@ -4,19 +4,16 @@
 
 **Atenção: para ler o valor de uma variável de ambiente utilize sempre "echo $env:EXEMPLO", sem nenhum outro comando, pois pode não haver permissão para ele.**
 
-### Workspace
+### Projeto
 
-Este diretório contém apenas a configuração do OpenCode. O projeto real está no diretório pai ou em níveis superiores.
+O opencode inicia na raiz do repositório de desenvolvimento. O diretório de trabalho atual é o projeto.
 
-1. Nunca trate o diretório atual como o projeto em desenvolvimento.
-2. Se a variável de ambiente `ATOMIC_AI_REPO` estiver definida, considere seu valor como o caminho completo do repositório de desenvolvimento. Caso contrário, explore `..` ou `../..` até localizar a raiz do projeto.
-3. Localize e leia o(s) arquivo(s) `README.md` do repositório de desenvolvimento para compreender o contexto, a arquitetura, a estrutura do projeto, a forma de desenvolvimento e qualquer documentação adicional relevante.
-4. Caso existam links para outras documentações, wikis ou diretórios de documentação, consulte-os antes de iniciar tarefas complexas.
-5. Consulte `knowledge/` para obter instruções e conhecimento específico do domínio.
-6. Evite carregar e ler arquivos inteiros, prefira fazer isso sempre por partes.
+1. Localize e leia o(s) arquivo(s) `README.md` para compreender o contexto, a arquitetura, a estrutura do projeto, a forma de desenvolvimento e qualquer documentação adicional relevante.
+2. Caso existam links para outras documentações, wikis ou diretórios de documentação, consulte-os antes de iniciar tarefas complexas.
+3. Consulte `{OPENCODE_CONFIG_DIR}/knowledge/` para obter instruções e conhecimento específico do domínio, onde `OPENCODE_CONFIG_DIR` é o diretório pai do caminho em `OPENCODE_CONFIG`.
+4. Evite carregar e ler arquivos inteiros, prefira fazer isso sempre por partes.
 
 **Confirmação:** Ao final, informe brevemente ao usuário:
-- Caminho do repositório encontrado
 - Se o README foi lido
 - Se existe documentação adicional consultada
 
