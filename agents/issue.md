@@ -25,6 +25,7 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
   "summary": "string — obrigatório",
   "changedFiles": ["array de strings — obrigatório"],
   "prTitle": "string ou null — obrigatório",
+  "commitMessages": ["array de strings — obrigatório quando há alterações de código"],
   "branchName": "string ou null — obrigatório",
   "agentUsed": "string — obrigatório"
 }
@@ -38,7 +39,12 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
   - Se o próprio agente respondeu a uma pergunta: o `summary` deve conter a resposta fornecida ao usuário.
   - **NUNCA deixe summary vazio ou como string vazia.** Sempre escreva algo significativo.
 - **changedFiles** (obrigatório): Lista dos arquivos alterados. Se NENHUM arquivo foi alterado (ex: resposta a pergunta, plano), use `[]`.
-- **prTitle** (obrigatório): Título conciso para o Pull Request. Se nenhum código foi alterado, use `null`.
+- **prTitle** (obrigatório): Título conciso para o Pull Request (máximo 72 caracteres). Se nenhum código foi alterado, use `null`. Regras: sempre em português, sem prefixos convencionais (`feat:`, `fix:`, `chore:`, etc), formato: verbo no infinitivo + contexto. Exemplo correto: `Adicionar validação de e-mail no cadastro`. Exemplo errado: `feat: add email validation`.
+- **commitMessages** (obrigatório quando há alterações de código): Array de strings com as mensagens de commit que o setup script usará para commitar cada grupo de alterações. Se NENHUM código foi alterado, use `[]`. Regras: sempre em português, sem prefixos convencionais (`feat:`, `fix:`, `chore:`, etc), verbo no infinitivo + contexto claro, máximo 72 caracteres. Use um item por commit distinto — se todas as alterações devem ir em um único commit, use um único item. Se o Build Agent fez múltiplos commits, inclua-os todos na ordem. O primeiro item do array será a mensagem do commit do setup script.
+  - ✅ Correto: `"commitMessages": ["Adicionar validação de e-mail no cadastro"]`
+  - ✅ Correto: `"commitMessages": ["Corrigir cálculo de frete", "Atualizar testes unitários"]`
+  - ❌ INCORRETO: `"commitMessages": ["feat: add email validation"]` (prefixo + inglês)
+  - ❌ INCORRETO: `"commitMessages": ["test"]` (genérico demais)
 - **branchName** (obrigatório): Slug da branch para o PR. Formato: lowercase, hífens no lugar de espaços, sem caracteres especiais. Padrão regex: `[a-z0-9]+(-[a-z0-9]+)*`. Exemplos: `implementacao-da-feature`, `fix-login-error`, `add-unit-tests`. Se nenhum código foi alterado, use `null`.
   - **⚠️ REGRA CRÍTICA**: `branchName` DEVE ser um slug NOVO e ÚNICO. **NUNCA** use o branch base da issue (ex: `issue/1`) como `branchName`. Isso causa falha na criação do PR.
   - **⚠️ REGRA DE COERÊNCIA**: Se `changedFiles` contém arquivos, `branchName` DEVE ser um slug (nunca `null`). Se o Build Agent criou ou alterou um arquivo, PRECISA de uma branch para o PR.
@@ -53,7 +59,7 @@ Ao finalizar QUALQUER operação — seja delegação para Plan/Build, resposta 
 Use `node -e` para gravar o arquivo:
 
 ```bash
-node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/agent-result.json',JSON.stringify({summary:'Plano de implementação para...',changedFiles:[],prTitle:null,branchName:null,agentUsed:'plan'},null,2))"
+node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/agent-result.json',JSON.stringify({summary:'Plano de implementação para...',changedFiles:[],prTitle:null,commitMessages:[],branchName:null,agentUsed:'plan'},null,2))"
 ```
 
 ### Validação mental ANTES de gravar
@@ -64,10 +70,11 @@ Antes de executar o comando `node -e`, verifique:
 3. ✅ `changedFiles` é um array (mesmo que vazio `[]`)?
 4. ✅ **SE o Build Agent alterou ou criou arquivos, `changedFiles` contém a lista desses arquivos?** (extraia do output do Build Agent, NÃO use `[]`)
 5. ✅ `prTitle` é string ou `null`?
-6. ✅ `branchName` é slug ou `null`?
-7. ✅ `branchName` NÃO contém `issue/` nem `main`? (se contém, é ERRO — use um slug novo)
-8. ✅ **SE `changedFiles` tem arquivos, `branchName` NÃO é `null`?** (coerência obrigatória)
-9. ✅ `agentUsed` é `"plan"` ou `"build"`? (NÃO use `"direct"` — este valor não existe)
+6. ✅ **SE o Build Agent alterou ou criou arquivos, `commitMessages` é um array não vazio?** (deve conter a mensagem do commit em português, sem prefixos convencionais)
+7. ✅ `branchName` é slug ou `null`?
+8. ✅ `branchName` NÃO contém `issue/` nem `main`? (se contém, é ERRO — use um slug novo)
+9. ✅ **SE `changedFiles` tem arquivos, `branchName` NÃO é `null`?** (coerência obrigatória)
+10. ✅ `agentUsed` é `"plan"` ou `"build"`? (NÃO use `"direct"` — este valor não existe)
 
 Se QUALQUER resposta for "não", corrija antes de gravar.
 
@@ -164,18 +171,21 @@ O Build Agent deve seguir todas as diretrizes do agents/build.md e invocar o sub
 |---------------|-------------------------------|
 | `summary` | Seção **Resumo** — use o texto completo como summary (escreva em MARKDOWN) |
 | `changedFiles` | Seção **Arquivos alterados** — extraia os nomes dos arquivos listados como array de strings |
-| `prTitle` | Gere um título conciso (máximo 72 chars) baseado no Resumo |
+| `prTitle` | Gere um título conciso (máximo 72 chars) baseado no Resumo, em português, sem prefixos convencionais |
+| `commitMessages` | Gere a(s) mensagem(ns) de commit baseada(s) no Resumo — em português, sem prefixos convencionais, verbo no infinitivo + contexto, máximo 72 chars por item |
 | `branchName` | Gere um slug novo a partir do Resumo — lowercase, hífens, sem caracteres especiais, regex: `[a-z0-9]+(-[a-z0-9]+)*` |
 | `agentUsed` | `"build"` |
 
-**⚠️ REGRA CRÍTICA**: Se o Build Agent alterou ou criou arquivos, `changedFiles` NÃO pode ser `[]` e `branchName` NÃO pode ser `null`. Extraia os arquivos do output do Build Agent — NÃO invente nem omita.
+**⚠️ REGRA CRÍTICA**: Se o Build Agent alterou ou criou arquivos, `changedFiles` NÃO pode ser `[]`, `branchName` NÃO pode ser `null` e `commitMessages` NÃO pode ser `[]`. Extraia os arquivos do output do Build Agent — NÃO invente nem omita.
 
 **⚠️ REGRA DE QUALIDADE**: O `summary` DEVE ser uma descrição significativa do que foi implementado. **NUNCA** use strings genéricas como `"test"`, `"ok"`, `"feito"`, `"done"`, `"implementado"`, `"alterações feitas"` ou similares. Se o Resumo do Build Agent for curto demais, expanda-o descrevendo o que foi feito. Inclua **Decisões** e **Limitações** do Build Agent no `summary` quando relevantes (como seções adicionais em markdown).
+
+**⚠️ REGRA DE COMMIT**: As `commitMessages` DEVEM ser em português, sem prefixos convencionais (`feat:`, `fix:`, `chore:`, etc), com verbo no infinitivo + contexto claro. Cada mensagem deve ter no máximo 72 caracteres. Se o Build Agent fez múltiplos commits, inclua-os todos na ordem.
 
 Exemplo de comando `node -e` com Build Agent:
 
 ```bash
-node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/agent-result.json',JSON.stringify({summary:'## Resumo\n\nRemovido o serviço X e refactorizado o componente Y para usar detecção direta de repositórios.\n\n## Arquivos alterados\n\n- `arquivo1.cs` — removido\n- `arquivo2.cs` — refatorado',changedFiles:['arquivo1.cs','arquivo2.cs'],prTitle:'Refactor: remover serviço X e usar detecção direta',branchName:'refactor-remover-servico-x',agentUsed:'build'},null,2))"
+node -e "const fs=require('fs');fs.writeFileSync('/workspace/atomic-ai/result/agent-result.json',JSON.stringify({summary:'## Resumo\n\nRemovido o serviço X e refactorizado o componente Y para usar detecção direta de repositórios.\n\n## Arquivos alterados\n\n- `arquivo1.cs` — removido\n- `arquivo2.cs` — refatorado',changedFiles:['arquivo1.cs','arquivo2.cs'],prTitle:'Remover serviço X e usar detecção direta de repositórios',commitMessages:['Remover serviço X e refactorizar componente Y para detecção direta de repositórios'],branchName:'refactor-remover-servico-x',agentUsed:'build'},null,2))"
 ```
 
 ---
@@ -189,7 +199,34 @@ Quando delegar para o Plan Agent via Task tool, forneça:
 
 O Plan Agent deve seguir todas as diretrizes do agents/plan.md e produzir um plano completo.
 
-**⚠️ CAPTURA DE OUTPUT**: O Plan Agent produz o plano como texto na resposta dele. O resultado volta para você via Task tool. Use o texto retornado como `summary` no `agent-result.json`. Para Plan: `changedFiles` = `[]`, `prTitle` = `null`, `branchName` = `null`, `agentUsed` = `"plan"`.
+**⚠️ CAPTURA DE OUTPUT**: O Plan Agent produz o plano como texto na resposta dele. O resultado volta para você via Task tool. Use o texto retornado como `summary` no `agent-result.json`. Para Plan: `changedFiles` = `[]`, `prTitle` = `null`, `commitMessages` = `[]`, `branchName` = `null`, `agentUsed` = `"plan"`.
+
+---
+
+## Diretrizes de mensagem de commit
+
+Quando o Build Agent fizer commits, as mensagens DEVEM seguir estas regras:
+
+### Regras
+- **Sempre em português**
+- **Sem prefixos convencionais** — NÃO use `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`, `style:` ou similares
+- **Formato**: verbo no infinitivo + contexto claro do que foi alterado
+- **Máximo 72 caracteres** na primeira linha
+- **Corpo opcional** (separado por linha em branco) para detalhes adicionais
+
+### Exemplos corretos
+- `Adicionar validação de e-mail no formulário de cadastro`
+- `Corrigir cálculo de frete para pedidos internacionais`
+- `Remover dependência obsoleta do projeto`
+- `Atualizar documentação da API com novos endpoints`
+- `Refatorar componente de autenticação para usar token JWT`
+
+### Exemplos errados
+- `feat: adicionar validação` ❌ (prefixo convencional)
+- `Fix bug` ❌ (em inglês)
+- `Chore: update deps` ❌ (prefixo + inglês)
+- `test` ❌ (genérico demais)
+- `Corrigir issue #7` ❌ (genérico — não diz o quê foi corrigido)
 
 ---
 

@@ -113,6 +113,33 @@ Nunca finalize sem executar o Review.
 
 ---
 
+## Diretrizes de mensagem de commit
+
+Quando fizer commits, as mensagens DEVEM seguir estas regras:
+
+### Regras
+- **Sempre em português**
+- **Sem prefixos convencionais** — NÃO use `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`, `style:` ou similares
+- **Formato**: verbo no infinitivo + contexto claro do que foi alterado
+- **Máximo 72 caracteres** na primeira linha
+- **Corpo opcional** (separado por linha em branco) para detalhes adicionais
+
+### Exemplos corretos
+- `Adicionar validação de e-mail no formulário de cadastro`
+- `Corrigir cálculo de frete para pedidos internacionais`
+- `Remover dependência obsoleta do projeto`
+- `Atualizar documentação da API com novos endpoints`
+- `Refatorar componente de autenticação para usar token JWT`
+
+### Exemplos errados
+- `feat: adicionar validação` ❌ (prefixo convencional)
+- `Fix bug` ❌ (em inglês)
+- `Chore: update deps` ❌ (prefixo + inglês)
+- `test` ❌ (genérico demais)
+- `Corrigir issue #7` ❌ (genérico — não diz o quê foi corrigido)
+
+---
+
 ## Princípios da Atomic
 
 - Simplicidade vence complexidade.
